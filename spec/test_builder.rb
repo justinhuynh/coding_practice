@@ -1,14 +1,27 @@
-require 'spec_helper'
-# require_relative "lib/exercises/test_exercise"
+require 'code_file'
+# call CodeWars API to import challenges?
+# binding.eval(File.read("lib/exercises/test_exercise.rb"), "test_exercise.rb")
+# load "lib/exercises/test_exercise.rb"
 
 module TestBuilder
   class << self
+    attr_accessor :code_directory, :test_directory
 
-    def run(file)
-      @filename = File.basename(file)
-      @prefix = @filename.sub("_spec.rb","")
-      @class_name = camelcase
-      # STDERR.puts(camelcase)
+    def configure(&block)
+      block.call self
+    end
+
+    def start!
+      get_files
+      @files.map! { |file| CodeFile.new(file) }
+      binding.pry
+    end
+
+    def get_files
+      @files = Dir[File.expand_path "#{code_directory}/**/*.rb"]
+    end
+
+    def run(filename_with_path)
       Class.new do
         def self.expect(args)
           args.each do |method_name, test_vals|
@@ -17,26 +30,16 @@ module TestBuilder
             end
           end
         end
-        # binding.pry
-        # binding.eval(File.read("lib/exercises/test_exercise.rb"), "test_exercise.rb")
-        # load "lib/exercises/test_exercise.rb"
-        eval(File.read("lib/exercises/test_exercise.rb"))
-        # binding.pry
-        # puts multiply(2,5)
+        eval(File.read(filename_with_path))
       end
-      # binding.pry
     end
 
-    def camelcase
-      @prefix.split('_').collect(&:capitalize).join
-    end
+    def generate_test_for(code_file)
+      %Q(
 
-    def generate
+
+
+      )
     end
   end
 end
-
-
-# NewSlate = Class.new do require_relative "lib/exercises/test_exercise"; puts multiply(2,5); end
-
-# BlankSlate = Class.new do eval(File.read("lib/exercises/test_exercise.rb")) end
