@@ -15,5 +15,5 @@ expect multiply:
 expect add_it_up:
   {
     [2,5] => 7,
-    [3202,4] => 306
+    [3202,4] => 3206
   }

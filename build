@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "coding_practice"
+
+TestBuilder.configure do |config|
+  config.code_directory = "lib/coding_practice/sandbox"
+  config.test_directory = "spec/exercises"
+end
+
+TestBuilder.start!

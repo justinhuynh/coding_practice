@@ -1,5 +1,4 @@
 class CodeFile
-  TEST_FILE_SUFFIX = "_spec.rb"
   FILE_SUFFIX = ".rb"
 
   attr_reader :full_path
@@ -12,9 +11,7 @@ class CodeFile
     File.basename(full_path, FILE_SUFFIX)
   end
 
-  def test_file_name
-    full_path.sub(/#{FILE_SUFFIX}$/, TEST_FILE_SUFFIX)
-  end
+
 
   def file_name
     File.basename(full_path)
