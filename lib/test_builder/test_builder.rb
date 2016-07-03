@@ -40,11 +40,10 @@ class TestBuilder
     @methods_loaded = {}
   end
 
-  def tests_for(args)
+  def tests_for(args, &block)
+    binding.pry
     @methods_loaded[args.keys.first] = args.values.first
   end
-
-  # alias_method :TESTS_FOR, :expect
 
   def test_file_name
     test_directory + base_name
