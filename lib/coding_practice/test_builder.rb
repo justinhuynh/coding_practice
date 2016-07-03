@@ -1,55 +1,70 @@
-module TestBuilder
+class TestBuilder
+  CONFIG = [
+    :code_directory,
+    :test_directory,
+    :template_directory,
+    :framework
+  ]
+
+  CONFIG.each do |attribute|
+    define_method attribute do
+      self.class.send attribute
+    end
+  end
+
   class << self
-    attr_accessor :code_directory, :test_directory
+    CONFIG.each { |attribute| attr_accessor attribute }
 
     def configure(&block)
       block.call self
     end
 
     def start!
-      get_files
-      # @files.map! { |file| CodeFile.new(file) }
-      @files.each { |file| run(file) }
-      binding.pry
+      get_files.each do |file|
+        test_builder = new(file)
+        test_builder.instance_eval(File.read(file))
+        test_builder.generate_test
+      end
     end
 
     def get_files
-      @files = Dir[File.expand_path "#{code_directory}/**/*.rb"]
+      @files = Dir["#{code_directory}**/*.rb"]
     end
+  end
 
-    def run(filename_with_path)
-      methods_loaded = {}
-      Class.new do
-        self.define_singleton_method :expect do |args|
-          methods_loaded[args.keys.first] = args.values.first
-        end
-        eval(File.read(filename_with_path))
-        binding.pry
-      end
-      methods_loaded
-      generate_test_for(filename_with_path, methods_loaded)
-    end
+  attr_reader :file
+  attr_accessor :methods_loaded
 
-    def test_file_name(filename_with_path)
-      base_name = File.basename(filename_with_path.sub(/.rb$/, "_spec.rb"))
-      "spec/exercises/" + base_name
-    end
+  def initialize(file)
+    @file = file
+    @methods_loaded = {}
+  end
 
-    # def create_file(filename_with_path)
-    #   File.write(test_file_name, test_code)
-    # end
+  def tests_for(args)
+    @methods_loaded[args.keys.first] = args.values.first
+  end
 
+  # alias_method :TESTS_FOR, :expect
 
-    def generate_test_for(filename_with_path, methods_loaded)
-      template = get_template
-      @methods = methods_loaded
-      test_code = ERB.new(template, nil, '>').result(binding)
-      test_file = test_file_name(filename_with_path)
-      File.write(test_file, test_code)
-    end
+  def test_file_name
+    test_directory + base_name
+  end
 
-    def get_template
-      File.read("lib/coding_practice/templates/test.erb")
-    end
+  def base_name
+    File.basename(file.sub(/.rb$/, "_spec.rb"))
+  end
+
+  def generate_test
+    File.write(test_file_name, test_code)
+    puts "#{test_file_name} created"
+  end
+
+  def test_code
+    @methods = methods_loaded
+    ERB.new(template, nil, '>').result(binding)
+  end
+
+  def template
+    File.read("#{template_directory}#{framework}.erb")
   end
 end
