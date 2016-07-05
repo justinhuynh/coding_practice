@@ -6,7 +6,8 @@ require_relative "test_builder/test_builder"
 Dir["test_builder/templates/**"].each{ |f| require_relative(f) }
 
 TestBuilder.configure do |config|
-  config.code_directory = "lib/exercises/"
+  config.code_directory = "lib/sandbox/"
+  config.output_directory = "lib/exercises/"
   config.test_directory = "spec/exercises/"
   config.template_directory = "lib/test_builder/templates/"
   config.framework = :rspec
