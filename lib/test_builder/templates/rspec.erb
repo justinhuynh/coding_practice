@@ -1,0 +1,10 @@
+require 'spec_helper'
+
+<% @methods.each do |method, examples| %>
+describe "<%= method %>" do
+<% examples.each do |args, vals| %>
+  it { expect(<%= method %>(<%= args.join(", ") %>)).to eq <%= vals %> }
+<% end %>
+end
+
+<% end %>

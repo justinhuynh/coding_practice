@@ -1,5 +1,3 @@
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'coding_practice'
 require 'pry'
 
-# Dir[File.expand_path "lib/**/*.rb"].each{ |f| require_relative(f) }
+Dir[File.expand_path "lib/exercises/**/*.rb"].each{ |f| require_relative(f) if File.file?(f) }

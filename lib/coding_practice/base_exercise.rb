@@ -1,4 +1,0 @@
-module BaseExercise
-  
-
-end

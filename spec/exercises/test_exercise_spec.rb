@@ -1,10 +1,12 @@
 require 'spec_helper'
-require 'test_builder'
 
-TestBuilder.run(__FILE__)
+describe "multiply" do
+  it { expect(multiply(2, 5)).to eq 10 }
+  it { expect(multiply(300, 4)).to eq 1200 }
+end
 
-# describe TestExercise do
-#   describe "#multiply" do
-#     it { expect(TestExercise.new.multiply(4,5)).to eq 20 }
-#   end
-# end
+describe "add_it_up" do
+  it { expect(add_it_up(2, 5)).to eq 7 }
+  it { expect(add_it_up(3202, 4)).to eq 3206 }
+end
+
