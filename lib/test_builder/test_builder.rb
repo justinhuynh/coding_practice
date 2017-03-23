@@ -30,7 +30,7 @@ class TestBuilder
     end
 
     def get_files
-      @files = Dir["#{code_directory}**/*.rb"]
+      Dir["#{code_directory}**/*.rb"]
     end
   end
 
